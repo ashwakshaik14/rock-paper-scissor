@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rock Paper Scissors</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: blanchedalmond;
+            font-family: Arial, sans-serif;
+        }
+
+        nav {
+            background-color: rgb(144, 181, 198);
+            text-align: center;
+            padding: 1rem;
+            font-size: 2.5rem;
+            color: white;
+        }
+
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 80vh;
+        }
+
+        .ain {
+            display: flex;
+            gap: 50px;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            height: 120px;
+            transition: transform 0.5s ease;
+        }
+
+        button {
+            border: none;
+            background: none;
+            cursor: pointer;
+        }
+
+        button:hover .logo {
+            transform: scale(1.2);
+        }
+
+        #score {
+            display: flex;
+            gap: 50px;
+            margin-top: 30px;
+        }
+
+        .update {
+            text-align: center;
+        }
+
+        #user,
+        #com {
+            font-size: 2.2rem;
+            font-weight: bold;
+        }
+
+        .update p:nth-child(2) {
+            font-size: 1.5rem;
+            font-weight: normal;
+        }
+
+        #play {
+            margin-top: 40px;
+            font-size: 1.5rem;
+            padding: 0.5em;
+            background-color: blue;
+            border: none;
+            border-radius: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <h1>Rock Paper Scissors</h1>
+    </nav>
+
+    <main>
+        <div class="ain">
+            <button id="paper"><img class="logo" src="paper.png" alt="Paper"></button>
+            <button id="stone"><img class="logo" src="stone.png" alt="Stone"></button>
+            <button id="scissor"><img class="logo" src="scissors.png" alt="Scissors"></button>
+        </div>
+        <div id="score">
+            <div class="update">
+                <p id="user">0</p>
+                <p>You</p>
+            </div>
+            <div class="update">
+                <p id="com">0</p>
+                <p>Computer</p>
+            </div>
+        </div>
+        <div id="play">
+            <p>Play your move</p>
+        </div>
+    </main>
+    <script>
+        let userScore = 0;
+        let comScore = 0;
+        let msg = document.getElementById("play");
+        let comUpdate=document.querySelector('#com');
+        let userUpdate=document.querySelector('#user');
+        // Selecting all the buttons inside the .ain div
+        let choices = document.querySelectorAll(".ain button");
+
+        // Computer's choice generator
+        const comG = () => {
+            const opt = ['paper', 'stone', 'scissor'];
+            let val = Math.floor(Math.random() * 3);
+            return opt[val];
+        };
+
+        // When it's a draw
+        const drawG = () => {
+            console.log("The game was a draw.");
+            msg.innerText = "Game is a draw. Try again!";
+            msg.style.backgroundColor = "blanchedalmond";
+            msg.style.color = 'black';
+        };
+
+        // Show the winner
+        const showWinner = (userWin, id, comp) => {
+            if (userWin) {
+                console.log("You win!");
+                userScore++;
+                userUpdate.innerText=userScore;
+                msg.innerText = `You win! ${id} beats ${comp}`;
+                msg.style.backgroundColor = "green";
+                msg.style.color = 'white';
+            } else {
+                console.log("You lose.");
+                comScore++;
+                comUpdate.innerText=comScore;
+                msg.innerText = `You lose! ${comp} beats ${id}`;
+                msg.style.backgroundColor = "red";
+                msg.style.color = 'white';
+            }
+        };
+
+        // Main game function
+        const playG = (id) => {
+            console.log("User choice =", id);
+
+            const comp = comG();
+            console.log("Computer choice =", comp);
+
+            if (id === comp) {
+                drawG();
+                return;
+            }
+
+            let userWin;
+
+            // Game logic to determine winner
+            if (id === 'stone' && comp === 'scissor' ||
+                id === 'scissor' && comp === 'paper' ||
+                id === 'paper' && comp === 'stone') {
+                userWin = true;
+            } else {
+                userWin = false;
+            }
+
+            showWinner(userWin, id, comp);  // Pass values correctly to showWinner
+        };
+
+        // Adding event listeners to each button for playing the game
+        choices.forEach((choice) => {
+            choice.addEventListener("click", () => {
+                let id = choice.getAttribute("id");
+                playG(id);
+            });
+        });
+    </script>
+
+</body>
+
+</html>
+ 
